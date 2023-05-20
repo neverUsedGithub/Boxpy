@@ -21,9 +21,8 @@ import importlib.resources
 # Typing
 from typing import Callable
 
-cli_boxes = json.loads(
-    importlib.resources.open_text("boxpy", "boxes.json")
-)
+with importlib.resources.open_text("boxpy", "boxes.json") as file:
+    cli_boxes = json.load(file)
 
 NEWLINE = "\n"
 PAD = " "
