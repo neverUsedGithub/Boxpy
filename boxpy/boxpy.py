@@ -16,13 +16,13 @@ from .wrap_ansi import wrap_ansi
 from .widest_line import widest_line
 
 # boxes.json
-import pkg_resources
+import importlib.resources
 
 # Typing
 from typing import Callable
 
 cli_boxes = json.loads(
-    pkg_resources.resource_string(__name__, "boxes.json")
+    importlib.resources.open_text("boxpy", "boxes.json")
 )
 
 NEWLINE = "\n"
