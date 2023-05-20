@@ -25,7 +25,7 @@ Boxpy is a Python library that offers a faithful recreation of the [boxen](https
 ```
 
 # API
-The following parameters can be when calling the `boxpy` function.
+The following parameters can be used when calling the `boxpy` function.
 - **text**: `str` - The text inside the box.
 - **width**: `int` - The width of the box.
 - **height**: `int` - The height of the box.
