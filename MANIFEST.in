@@ -1,1 +1,1 @@
-include boxpy/boxes.json
+recursive-include boxpy *.json
