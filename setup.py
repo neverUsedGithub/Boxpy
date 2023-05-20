@@ -1,7 +1,7 @@
 from setuptools import setup
 long_description = ""
 
-with open("README.md", "r") as f: long_description = f.read()
+with open("README.md", "r", encoding="utf8") as f: long_description = f.read()
 
 setup(
     name="Boxpy",
