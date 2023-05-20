@@ -1,0 +1,10 @@
+[project]
+name = "Boxpy"
+version = "0.0.1"
+description = "Python implementation of boxen for stylish text boxes."
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
