@@ -38,5 +38,5 @@ The following parameters can be when calling the `boxpy` function.
 - **float**: `"left" | "center" | "right"` - Where the box should horizontally be located.
 - **title**: `str` - The title to display in the header of the box.
 - **title_alignment**: `"left" | "center" | "right"` - Where the title should be located.
-- **border_color**: `str` - The border's color. (with [termcolor](https://pypi.org/project/termcolor/))
-- **background_color**: `str` - The box's background (with [termcolor](https://pypi.org/project/termcolor/))
+- **border_color**: `str` - The border's color. (using [termcolor](https://pypi.org/project/termcolor/))
+- **background_color**: `str` - The box's background (using [termcolor](https://pypi.org/project/termcolor/))
