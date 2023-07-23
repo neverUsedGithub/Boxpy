@@ -78,15 +78,5 @@
 		"bottom": "↑",
 		"bottomLeft": "↗",
 		"left": "→"
-	},
-	"none": {
-		"topLeft": "",
-		"top": "",
-		"topRight": "",
-		"right": "",
-		"bottomRight": "",
-		"bottom": "",
-		"bottomLeft": "",
-		"left": ""
 	}
 }

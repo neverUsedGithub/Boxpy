@@ -26,7 +26,10 @@ with importlib.resources.open_text("boxpy", "boxes.json") as file:
 
 NEWLINE = "\n"
 PAD = " "
-BORDERS_WIDTH = 2
+
+
+def get_border_width(border_style):
+    return 0 if border_style == None else 2
 
 
 def terminal_columns():
@@ -193,26 +196,39 @@ def box_content(content, content_width, margin, border_style: str, title_alignme
     margin_left = " " * margin["left"]
 
     if float == "center":
-        margin_width = max((columns - content_width - BORDERS_WIDTH) // 2, 0)
+        margin_width = max(
+            (columns - content_width - get_border_width(border_style)) // 2, 0)
         margin_left = " " * margin_width
     elif float == "right":
         margin_width = max(columns - content_width -
-                           margin["right"] - BORDERS_WIDTH, 0)
+                           margin["right"] - get_border_width(border_style), 0)
         margin_left = " " * margin_width
 
-    top = colorize_border(NEWLINE * margin["top"] + margin_left + chars["topLeft"] + (make_title(
-        title, chars["top"] * content_width, title_alignment) if title else (chars["top"] * content_width)) + chars["topRight"])
-    bottom = colorize_border(margin_left + chars["bottomLeft"] + chars["bottom"]
-                             * content_width + chars["bottomRight"] + NEWLINE * margin["bottom"])
+    result = ""
+
+    if margin.get("top", None):
+        result += NEWLINE * margin["top"]
+
+    if border_style != None or title:
+        result += colorize_border(margin_left + chars["topLeft"] + (make_title(
+            title, chars["top"] * content_width, title_alignment) if title else (chars["top"] * content_width)) + chars["topRight"]) + NEWLINE
 
     lines = content.split(NEWLINE)
-    middle = NEWLINE.join(map(lambda line: margin_left + colorize_border(
+
+    result += NEWLINE.join(map(lambda line: margin_left + colorize_border(
         chars["left"]) + colorize_content(line) + colorize_border(chars["right"]), lines))
 
-    return top + NEWLINE + middle + NEWLINE + bottom
+    if border_style != None:
+        result += NEWLINE + colorize_border(margin_left + chars["bottomLeft"] + chars["bottom"]
+                                            * content_width + chars["bottomRight"])
+
+    if margin.get("bottom", None):
+        result += NEWLINE * margin["bottom"]
+
+    return result
 
 
-def sanitize_options(fullscreen: bool | Callable, width: int = None, height: int = None):
+def sanitize_options(fullscreen: bool | Callable, width: int = None, height: int = None, border_style=None):
     if fullscreen:
         __size = os.get_terminal_size()
         new_dimensions = [__size.columns, __size.lines]
@@ -227,22 +243,24 @@ def sanitize_options(fullscreen: bool | Callable, width: int = None, height: int
             height = new_dimensions[1]
 
     if width:
-        width = max(1, width - BORDERS_WIDTH)
+        width = max(1, width - get_border_width(border_style))
 
     if height:
-        height = max(1, height - BORDERS_WIDTH)
+        height = max(1, height - get_border_width(border_style))
 
     return fullscreen, width, height
 
 
-def determine_dimensions(text, margin, padding, title: str = None, fullscreen: bool = None, width: int = None, height: int = None):
-    fullscreen, width, height = sanitize_options(fullscreen, width, height)
+def determine_dimensions(text, margin, padding, title: str = None, fullscreen: bool = None, width: int = None, height: int = None, border_style=None):
+    fullscreen, width, height = sanitize_options(
+        fullscreen, width, height, border_style)
 
     width_override = width != None
     columns = terminal_columns()
-    max_width = columns - margin["left"] - margin["right"] - BORDERS_WIDTH
+    max_width = columns - margin["left"] - \
+        margin["right"] - get_border_width(border_style)
 
-    widest = widest_line(wrap_ansi(text, columns - BORDERS_WIDTH,
+    widest = widest_line(wrap_ansi(text, columns - get_border_width(border_style),
                          hard=True, trim=False)) + padding["left"] + padding["right"]
 
     if title and width_override:
@@ -263,13 +281,14 @@ def determine_dimensions(text, margin, padding, title: str = None, fullscreen: b
 
     if not width_override:
         if (margin["left"] and margin["right"]) and width > max_width:
-            space_for_margins = columns - width - BORDERS_WIDTH
+            space_for_margins = columns - width - \
+                get_border_width(border_style)
             multiplier = space_for_margins / (margin["left"] + margin["right"])
 
             margin["left"] = max(0, math.floor(margin["left"] * multiplier))
             margin["right"] = max(0, math.floor(margin["right"] * multiplier))
 
-        width = min(width, columns - BORDERS_WIDTH -
+        width = min(width, columns - get_border_width(border_style) -
                     margin["left"] - margin["right"])
 
     if width - (padding["left"] + padding["right"]) <= 0:
@@ -288,7 +307,7 @@ def boxpy(text: str, width: int = None, height: int = None, fullscreen: bool | C
     margin = get_object(margin)
 
     margin, padding, title, fullscreen, width, height = determine_dimensions(
-        text, margin, padding, title, fullscreen, width, height)
+        text, margin, padding, title, fullscreen, width, height, border_style)
     text = make_context_text(text, padding, width, text_alignment, height)
 
     return box_content(text, width, margin, border_style, title_alignment, title, float, border_color, dim_border, background_color)

@@ -32,7 +32,7 @@ The following parameters can be used when calling the `boxpy` function.
 - **fullscreen**: `bool | Callable` - If `True` the box will take up the whole terminal, else its used to transform the `rows` and `cols` returned by `os.get_terminal_size()`.
 - **margin**: `int` - The space outside the box.
 - **padding**: `int` - The extra space inside the box.
-- **border_style**: `"single" | "double" | "round" | "bold" | "single-double" | "double-single" | "classic" | "arrow" | "none" | dict` - Style of the border.
+- **border_style**: `"single" | "double" | "round" | "bold" | "single-double" | "double-single" | "classic" | "arrow" | None | dict` - Style of the border.
 - **dim_border**: `bool` - Specify whether the border should have a dimmer color.
 - **text_alignment**: `"left" | "center" | "right"` - Where the text should be centered.
 - **float**: `"left" | "center" | "right"` - Where the box should horizontally be located.
