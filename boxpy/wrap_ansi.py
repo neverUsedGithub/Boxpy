@@ -154,10 +154,10 @@ def exec(string, columns, trim=True, word_wrap=True, hard=False):
                 f"(?:\\{ANSI_CSI}(?P<code>\\d+)m|\\{ANSI_ESCAPE_LINK}(?P<uri>.*){ANSI_ESCAPE_BELL})")
             matched = regex.match("".join(pre[index:]))
 
-            if matched.group("code"):
+            if matched and matched.group("code"):
                 code = int(matched.group("code"))
                 escape_code = None if code == END_CODE else code
-            elif matched.group("uri"):
+            elif matched and matched.group("uri"):
                 escape_url = None if len(matched.group(
                     "uri")) == 0 else matched.group("uri")
 
