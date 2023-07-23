@@ -75,7 +75,7 @@ def string_visible_trim_spaces_right(string):
     last = len(words)
 
     while last > 0:
-        if string_width(words[last - 1] > 0):
+        if string_width(words[last - 1]) > 0:
             break
 
         last -= 1
